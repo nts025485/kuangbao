@@ -1,128 +1,143 @@
+当然，以下是根据你当前优化后的代码**重新整理过的 `README.md`**，内容保持清晰且更加贴合现在的逻辑结构、变量名及行为：
+
 ---
 
 ## 🌐 Cloudflare Worker VLESS 中转服务说明文档
 
 ### 📌 项目简介
 
-本项目是一个基于 **Cloudflare Workers** 的轻量级 VLESS 中转服务，支持 **UUID 校验**、**WebSocket 转发**、**VLESS 订阅地址生成**，并集成了 **NAT64 支持**、**反代 IP 回退机制**、**配置可定制化** 等功能。
+本项目是一个基于 **Cloudflare Workers** 的轻量级 VLESS 中转服务，支持：
 
-适用于无法直连的环境，通过中转提升连接质量或规避封锁。
+* ✅ VLESS over WebSocket 中转
+* ✅ UUID 验证
+* ✅ 多 IP 随机分流
+* ✅ 自动生成订阅链接
+* ✅ NAT64 IPv6 支持
+* ✅ 备用反代 IP 回退
+
+适用于绕过封锁、优化连接质量、国内外中转等场景。
 
 ---
 
 ### 🚀 功能特性
 
-* ✅ 支持 VLESS over WebSocket
-* ✅ 支持 Cloudflare CDN 全局中转
-* ✅ 多 IP 支持，可自定义订阅入口
-* ✅ 自适应 NAT64 和备用反代地址
-* ✅ 支持一键订阅链接生成
-* ✅ 完整兼容原版 VLESS 客户端配置
+* ✅ VLESS 协议转发，兼容所有主流客户端
+* ✅ Cloudflare 全球加速 + 中转支持
+* ✅ 多出口 IP 支持，支持自定义节点名称
+* ✅ 智能 NAT64 转换（适配纯 IPv6 网络）
+* ✅ 自动回退至备用反代 IP
+* ✅ 内置订阅链接生成器，无需额外订阅服务
 
 ---
 
 ## 🛠️ 使用部署指南
 
-### 1. 创建 Worker
+### 1️⃣ 创建 Worker
 
-* 登录 Cloudflare → Workers & Pages → 创建 Worker
-* 在编辑器中粘贴完整的配置脚本（见上方脚本）
-* 点击 “Save and Deploy” 部署
+1. 登录 Cloudflare → Workers & Pages → 创建 Worker
+2. 在编辑器中粘贴脚本（使用优化后的代码版本）
+3. 点击 “Save and Deploy” 部署
 
-### 2. 设置环境变量
+### 2️⃣ 设置环境变量（可选但推荐）
 
-点击 Worker → `Settings` → `Variables` → 添加以下变量（可选但推荐）：
+进入 Worker → `Settings` → `Variables`，添加如下变量：
 
-| 变量名       | 类型   | 说明                           |
-| --------- | ---- | ---------------------------- |
-| `UUID`    | Text | 用于认证连接的唯一 UUID（必填）           |
-| `ID`      | Text | 订阅地址路径标识，如 `123456`          |
-| `IP`      | Text | 支持多个 IP（可换 IP），用换行分隔         |
-| `我的节点名字`  | Text | 节点在订阅链接中展示的名称（默认：狂暴）         |
-| `启用反代功能`  | Text | 设置为 `true` 开启备用反代 IP         |
-| `PROXYIP` | Text | 备用反代 IP 和端口，如 `1.2.3.4:443`  |
-| `NAT64`   | Text | 设置为 `true` 可自动尝试 IPv4 转 IPv6 |
+| 变量名       | 类型   | 说明                       |
+| --------- | ---- | ------------------------ |
+| `UUID`    | Text | 用于连接验证的唯一 UUID（**必填**）   |
+| `ID`      | Text | 自定义订阅路径标识，如 `123456`     |
+| `IP`      | Text | 多个出口 IP，换行分隔             |
+| `TXT`     | Text | 可选的订阅附加信息（如备注/公告）        |
+| `PROXYIP` | Text | 备用反代地址，如 `1.2.3.4:443`   |
+| `启用反代功能`  | Text | `true` 启用备用反代            |
+| `NAT64`   | Text | `true` 启用 IPv4 → IPv6 转换 |
+| `我的节点名字`  | Text | 节点名称（展示在订阅中，默认值：狂暴）      |
 
-示例：
+📌 示例配置：
 
 ```
-UUID = d26432c5-a84b-47c3-aaf8-b949f326efb3
+UUID = 5aba5b77-48eb-4ae2-b60d-5bfee7ac169e
 ID = 123456
 IP = 104.16.160.145
-我的节点名字 = 狂暴转发
-启用反代功能 = true
 PROXYIP = sjc.o00o.ooo:443
+启用反代功能 = true
 NAT64 = true
+我的节点名字 = 狂暴中转
 ```
 
 ---
 
-## 🔗 使用方式说明
+## 🔗 使用说明
 
-### 客户端配置（V2RayN / v2rayNG / Clash.Meta）
+### 🧾 客户端配置（v2rayN / v2rayNG / Clash.Meta）
 
-* 协议：`vless`
-* 地址：你部署的 Worker 地址（如 `xxx.workers.dev`）
-* 端口：`443`
-* UUID：你设置的 UUID
-* 加密方式：`none`
-* 传输方式：`ws`
-* TLS：开启
-* WebSocket 路径：`/?ed=2560`
-* host/sni：同你的域名
-
-### 订阅地址路径
-
-| 访问路径        | 功能说明                  |
-| ----------- | --------------------- |
-| `/ID`       | 返回“订阅地址提示”页面          |
-| `/ID/vless` | 生成 VLESS 订阅链接列表（多 IP） |
-
-例如：
-
-```text
-https://your-worker-subdomain.workers.dev/123456/vless
-```
+| 参数       | 配置值                               |
+| -------- | --------------------------------- |
+| 协议       | vless                             |
+| 地址       | 你的 Worker 域名（如 `xxx.workers.dev`） |
+| 端口       | 443                               |
+| UUID     | 与环境变量 `UUID` 一致                   |
+| 加密方式     | none                              |
+| 传输方式     | ws                                |
+| TLS      | ✅ 开启                              |
+| 路径       | `/?ed=2560`                       |
+| Host/SNI | 同你的域名                             |
 
 ---
 
-## 🧪 在线测试
+### 📬 订阅地址路径说明
 
-你可使用浏览器访问 `/ID` 和 `/ID/vless` 路径测试是否部署成功：
+| 路径          | 功能说明                     |
+| ----------- | ------------------------ |
+| `/ID`       | 返回提示页面（订阅地址说明）           |
+| `/ID/vless` | 自动生成 VLESS 订阅列表（多 IP 支持） |
+
+📌 示例链接：
 
 ```
 https://your-worker-subdomain.workers.dev/123456
 https://your-worker-subdomain.workers.dev/123456/vless
 ```
 
-如看到节点链接即表示部署成功。
+---
+
+## 🧪 测试部署成功
+
+使用浏览器访问：
+
+```text
+https://your-worker.workers.dev/123456
+https://your-worker.workers.dev/123456/vless
+```
+
+能看到订阅链接说明 / vless 链接即部署成功。
 
 ---
 
-## ❓常见问题（FAQ）
+## ❓ 常见问题解答（FAQ）
 
-### 1. 连接失败怎么排查？
+### 1. 客户端连接失败怎么办？
 
-* UUID 错误 → 请确认客户端 UUID 与环境变量一致
-* IP 被封 → 可更换 `IP` 配置中的地址
-* 反代失败 → 检查 `PROXYIP` 是否能正常访问
-* NAT64 无效 → 某些区域不支持 IPv6，可关闭 `NAT64`
+* ✅ 检查客户端 UUID 是否与你设置的 `UUID` 一致
+* ✅ IP 被封：更换 `IP` 变量的地址
+* ✅ NAT64 问题：关闭 `NAT64` 试试
+* ✅ 备用反代无效：检查 `PROXYIP` 是否可连接
 
 ### 2. 支持哪些客户端？
 
 * ✅ v2rayN（Windows）
 * ✅ v2rayNG / SagerNet（Android）
 * ✅ Shadowrocket / Stash（iOS）
-* ✅ Clash.Meta（全平台）
+* ✅ Clash.Meta / MetaX（全平台）
 
 ---
 
 ## 📦 附加说明
 
-### 📁 自建订阅转换
+### 📁 自建订阅转换功能（可选）
 
-若你不使用订阅转换服务（如 Sub-Converter），此脚本可直接生成标准 VLESS 链接。
+你可直接使用 `/ID/vless` 路径生成标准 VLESS 链接，无需借助 Sub-Converter 服务。
 
-也可将 `TXT` 变量设置为你的订阅 JSON 内容或自定义文本返回。
+如需自定义返回内容，可在环境变量中设置 `TXT` 为任意文本或订阅内容。
 
 ---
