@@ -56,7 +56,7 @@
 ```
 UUID = 5aba5b77-48eb-4ae2-b60d-5bfee7ac169e
 ID = 123456
-IP = 104.16.160.145
+IP = 1.1.1.1(自行替换本地优选 护食.jpg)
 PROXYIP = sjc.o00o.ooo:443
 启用反代功能 = true
 NAT64 = true
