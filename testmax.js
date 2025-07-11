@@ -1,7 +1,7 @@
 import{connect}from'cloudflare:sockets';
 const[d,e,U,C,h]=[new TextDecoder(),new TextEncoder(),[],{},{}];
 const g=(k,f,n)=>{const v=import.meta?.env?.[k]??n?.[k];return!v?f:typeof v!=='string'?v:(t=>t==='true'||t!=='false'&&(t.includes('\n')?t.split('\n').map(x=>x.trim()).filter(Boolean):isNaN(+t)?t:+t))(v.trim())};
-const init=n=>{if(C.done)return C;const m={I:['ID','123456'],U:['UUID','5aba5b77-48eb-4ae2-b60d-5bfee7ac169e'],P:['IP',['104.16.160.145']],T:['TXT',[]],R:['PROXYIP','sjc.o00o.ooo:443'],F:['启用反代功能',!0],N:['NAT64',!1],N2:['我的节点名字','狂暴']};for(const[k,[k2,d]]of Object.entries(m))C[k]=g(k2,d,n);U.push(...Uint8Array.from(C.U.replace(/-/g,'').match(/.{2}/g).map(x=>parseInt(x,16))));return C.done=1,C};
+const init=n=>{if(C.done)return C;const m={I:['ID','123456'],U:['UUID','5aba5b77-48eb-4ae2-b60d-5bfee7ac169e'],P:['IP',['1.1.1.1']],T:['TXT',[]],R:['PROXYIP','sjc.o00o.ooo:443'],F:['启用反代功能',!0],N:['NAT64',!1],N2:['我的节点名字','狂暴']};for(const[k,[k2,d]]of Object.entries(m))C[k]=g(k2,d,n);U.push(...Uint8Array.from(C.U.replace(/-/g,'').match(/.{2}/g).map(x=>parseInt(x,16))));return C.done=1,C};
 const chk=a=>{for(let i=16;i--;)if(a[i+1]!==U[i])return!1;return!0};
 const to64=ip=>'2001:67c:2960:6464::'+ip.split('.').map(x=>(+x).toString(16).padStart(2,'0')).join('').match(/.{4}/g).join(':');
 const tryConn=async(h,p,c,init)=>{try{const s=await connect({hostname:h,port:p});await s.opened;return{tcpSocket:s,initialData:init}}catch{}if(c.N&&/^\d+\.\d+\.\d+\.\d+$/.test(h))try{return await tryConn(to64(h),p,{...c,N:0},init)}catch{}if(c.F&&c.R){const[h2,p2]=c.R.split(':');return await tryConn(h2,+p2||p,{...c,F:0},init)}throw new Error('连接失败')};
