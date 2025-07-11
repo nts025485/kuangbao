@@ -26,7 +26,7 @@ function 初始化配置(env) {
   ENV_CACHE.ID = 读取环境变量('ID', '242222', env);
   ENV_CACHE.UUID = 读取环境变量('UUID', 'd26432c5-a84b-47c3-aaf8-b949f326efb3', env);
   ENV_CACHE.UUID_BYTES = UUID_BYTES_CACHE = uuidStringToBytes(ENV_CACHE.UUID);
-  ENV_CACHE.IP = 读取环境变量('IP', ['104.16.160.145'], env);
+  ENV_CACHE.IP = 读取环境变量('IP', ['1.1.1.1'], env);
   ENV_CACHE.TXT = 读取环境变量('TXT', [], env);
   ENV_CACHE.PROXYIP = 读取环境变量('PROXYIP', 'sjc.o00o.ooo:443', env);
   ENV_CACHE.启用反代功能 = 读取环境变量('启用反代功能', true, env);
