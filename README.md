@@ -2,6 +2,8 @@
 
 ## 🌐 Cloudflare Worker VLESS 中转服务说明文档
 
+### 注：越下面越猛，越容易触发限流
+
 ### 📌 项目简介
 
 本项目是一个基于 **Cloudflare Workers** 的轻量级 VLESS 中转服务，支持：
