@@ -19,7 +19,7 @@ const init = env => {
   const m = {
     I: ['ID', '123456'],
     U: ['UUID', '5aba5b77-48eb-4ae2-b60d-5bfee7ac169e'],
-    P: ['IP', ['104.16.160.145']],
+    P: ['IP', ['1.1.1.1']],
     T: ['TXT', []],
     R: ['PROXYIP', 'sjc.o00o.ooo:443'],
     F: ['启用反代功能', true],
