@@ -112,6 +112,11 @@ https://your-worker.workers.dev/123456/vless
 
 能看到订阅链接说明 / vless 链接即部署成功。
 
+允许套用各位大佬的优选SUB：
+以MR大佬的SUB为例：点击 https://owo.o00o.ooo/ 将你上面得到的订阅链接的节点套入，点击“生成优选订阅”即可。
+![Uploading 图片.png…]()
+
+
 ---
 
 ## ❓ 常见问题解答（FAQ）
