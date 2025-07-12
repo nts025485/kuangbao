@@ -1,6 +1,6 @@
 import{connect}from'cloudflare:sockets';
 const[d,e,U,P,S]=[new TextDecoder(),new TextEncoder(),Uint8Array.from('5aba5b77-48eb-4ae2-b60d-5bfee7ac169e'.replace(/-/g,'').match(/.{2}/g).map(x=>parseInt(x,16))),new Map(),new Set()];
-const C={I:'123456',U:'5aba5b77-48eb-4ae2-b60d-5bfee7ac169e',P:['1.1.1.1', '2.2.2.2', '3.3.3.3'],R:'sjc.o00o.ooo:443',F:!0,N:!1,N2:'狂暴'};
+const C={I:'123456',U:'5aba5b77-48eb-4ae2-b60d-5bfee7ac169e',P:['1.1.1.1'],R:'sjc.o00o.ooo:443',F:!0,N:!1,N2:'Kb'};
 let W=null,T=null;
 const chk=a=>{let i=16;while(i--)if(a[i+1]!==U[i])return!1;return!0};
 const to64=ip=>'2001:67c:2960:6464::'+ip.split('.').map(x=>(+x).toString(16).padStart(2,'0')).join('').match(/.{4}/g).join(':');
