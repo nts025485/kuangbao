@@ -30,6 +30,12 @@
 
 ---
 
+## ❗ 允许套用各位大佬的优选SUB：
+以MR大佬的SUB为例：点击 https://owo.o00o.ooo/ 将你上面得到的订阅链接的节点套入，点击“生成优选订阅”即可。
+<img width="1920" height="1040" alt="QQ图片20250712144001" src="https://github.com/user-attachments/assets/3016b514-d334-4792-8108-c35843a76529" />
+
+---
+
 ## 🛠️ 使用部署指南
 
 ### 1️⃣ 创建 Worker
@@ -111,13 +117,6 @@ https://your-worker.workers.dev/123456/vless
 ```
 
 能看到订阅链接说明 / vless 链接即部署成功。
-
-##允许套用各位大佬的优选SUB：
-以MR大佬的SUB为例：点击 https://owo.o00o.ooo/ 将你上面得到的订阅链接的节点套入，点击“生成优选订阅”即可。
-<img width="1920" height="1040" alt="QQ图片20250712144001" src="https://github.com/user-attachments/assets/3016b514-d334-4792-8108-c35843a76529" />
-
-
-
 
 ---
 
