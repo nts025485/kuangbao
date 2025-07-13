@@ -1,16 +1,10 @@
 import{connect}from'cloudflare:sockets';
-const ID='123456';
-const UUID='5aba5b77-48eb-4ae2-b60d-5bfee7ac169e';
-const IPS='1.1.1.1,1.0.0.1'; // 英文逗号分割多个IP
-const PROXYIP='sjc.o00o.ooo:443';
-const PROXY_ENABLED=true;
-const NAT64=false;
-const NODE_NAME='狂暴';
-const[d,e,U,C,P,S,A]=[new TextDecoder(),new TextEncoder(),[],{I:ID,U:UUID,P:IPS.split(','),R:PROXYIP,F:PROXY_ENABLED,N:NAT64,N2:NODE_NAME},new Map(),new Set(),new ArrayBuffer(8192)];
+const I='123456',UUID='5aba5b77-48eb-4ae2-b60d-5bfee7ac169e',P=['1.1.1.1','8.8.8.8','1.0.0.1'],R='sjc.o00o.ooo:443',F=1,N=0,N2='狂暴';
+const[d,e,U,C,PS,S,A]=[new TextDecoder(),new TextEncoder(),[],{I,U:UUID,P,R,F,N,N2},new Map(),new Set(),new ArrayBuffer(8192)];
 let W,T,B=new Uint8Array(A),O=0;
 const init=()=>{if(C.done)return C;const u=C.U.replace(/-/g,'');for(let i=0;i<32;i+=2)U[i>>1]=parseInt(u.substr(i,2),16);return C.done=1,C};
 const chk=a=>{let i=0;do{if(a[i+1]!==U[i])return!1;}while(++i<16);return!0};
-const tryConn=async(h,p,c,init)=>{const k=h+':'+p;if(P.has(k)&&!S.has(k))return{...P.get(k),initialData:init};try{const s=await connect({hostname:h,port:p});await s.opened;const r={tcpSocket:s,initialData:init};P.set(k,r);S.delete(k);return r}catch{S.add(k)}if(c.N&&/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(h))try{return await tryConn('2001:67c:2960:6464::'+h.split('.').map(x=>(+x).toString(16).padStart(2,'0')).join('').match(/.{4}/g).join(':'),p,{...c,N:0},init)}catch{}if(c.F&&c.R){const i=c.R.lastIndexOf(':');if(i>0&&!/^\[.*\]$/.test(c.R.substring(0,i)))return await tryConn(c.R.substring(0,i),+c.R.substring(i+1)||443,{...c,F:0},init);return await tryConn(c.R,443,{...c,F:0},init)}throw Error('连接失败')};
+const tryConn=async(h,p,c,init)=>{const k=h+':'+p;if(PS.has(k)&&!S.has(k))return{...PS.get(k),initialData:init};try{const s=await connect({hostname:h,port:p});await s.opened;const r={tcpSocket:s,initialData:init};PS.set(k,r);S.delete(k);return r}catch{S.add(k)}if(c.N&&/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(h))try{return await tryConn('2001:67c:2960:6464::'+h.split('.').map(x=>(+x).toString(16).padStart(2,'0')).join('').match(/.{4}/g).join(':'),p,{...c,N:0},init)}catch{}if(c.F&&c.R){const i=c.R.lastIndexOf(':');if(i>0&&!/^\[.*\]$/.test(c.R.substring(0,i)))return await tryConn(c.R.substring(0,i),+c.R.substring(i+1)||443,{...c,F:0},init);return await tryConn(c.R,443,{...c,F:0},init)}throw Error('连接失败')};
 const parseV=async(buf,c)=>{const a=new Uint8Array(buf),t=a[17],p=(a[18+t+1]<<8)|a[18+t+2];let o=18+t+4,h='';const at=a[o-1];if(at===1){h=a[o]+'.'+a[o+1]+'.'+a[o+2]+'.'+a[o+3];o+=4}else if(at===2){const l=a[o];h=d.decode(a.subarray(o+1,o+1+l));o+=l+1}else if(at===3){h=Array.from({length:8},(_,i)=>((a[o+2*i]<<8)|a[o+2*i+1]).toString(16)).join(':');o+=16}return await tryConn(h,p,c,buf.slice(o))};
 const tunnel=(ws,tcp,init)=>{const w=tcp.writable.getWriter(),r=tcp.readable.getReader(),cleanup=()=>{try{r.releaseLock();w.releaseLock();tcp.close()}catch{}};ws.send(new Uint8Array([0,0]));init&&w.write(init);let b=[],t,len=0;ws.onmessage=({data})=>{const chunk=data instanceof ArrayBuffer?new Uint8Array(data):typeof data==='string'?e.encode(data):data;b.push(chunk);len+=chunk.length;t||(t=setTimeout(()=>{if(!len)return;try{if(b.length===1)w.write(b[0]);else{if(len<=8192){O=0;for(const x of b){B.set(x,O);O+=x.length}w.write(B.subarray(0,len))}else{const o=new Uint8Array(len);let pos=0;for(const x of b){o.set(x,pos);pos+=x.length}w.write(o)}}}catch{cleanup()}b=[];len=0;t=null},0))};(async()=>{try{for(;;){const{value,done}=await r.read();if(done)break;ws.send(value)}}catch{}finally{ws.close()}})();ws.onclose=ws.onerror=cleanup};
 const conf=(h,c)=>W||(W=c.P.concat([h+':443']).map(x=>{const[raw,name=c.N2]=x.split('#'),[addr,port=443]=raw.split(':');return`vless://${c.U}@${addr}:${port}?encryption=none&security=tls&type=ws&host=${h}&sni=${h}&path=%2F%3Fed%3D2560#${name}`}).join('\n'));
