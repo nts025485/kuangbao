@@ -1,7 +1,7 @@
 import{connect}from'cloudflare:sockets';
 const d=new TextDecoder(),e=new TextEncoder();
 let U,C={};
-const g=(k,f,n)=>{const v=import.meta?.env?.[k]??n?.[k];if(!v)return f;if(typeof v!=='string')return v;const t=v.trim();return t==='true'?1:t==='false'?0:t.includes('\n')?t.split('\n').map(x=>x.trim()).filter(Boolean):+t||t};
+const g=(k,f,n)=>{const v=n?.[k];if(!v)return f;if(typeof v!=='string')return v;const t=v.trim();return t==='true'?1:t==='false'?0:t.includes('\n')?t.split('\n').map(x=>x.trim()).filter(Boolean):+t||t};
 const init=n=>{if(C.done)return C;const m={I:['ID','123456'],U:['UUID','5aba5b77-48eb-4ae2-b60d-5bfee7ac169e'],P:['IP',['1.1.1.1']],T:['TXT',[]],R:['PROXYIP','sjc.o00o.ooo:443'],F:['启用反代功能',1],N:['NAT64',0],N2:['我的节点名字','狂暴']};for(const k in m)C[k]=g(m[k][0],m[k][1],n);return C.B=U=Uint8Array.from(C.U.replace(/-/g,'').match(/.{2}/g).map(x=>parseInt(x,16))),C.done=1,C};
 const chk=b=>{for(let i=0;i<U.length;i++)if(b[i]!==U[i])return 0;return 1};
 const to64=ip=>'2001:67c:2960:6464::'+ip.split('.').map(x=>(+x).toString(16).padStart(2,'0')).join('').match(/.{4}/g).join(':');
