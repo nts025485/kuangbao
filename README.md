@@ -19,7 +19,7 @@
 
 ## ⚠️ 免责声明
 
-本免责声明适用于 GitHub 项目 **“kuangbao”**（[项目地址](https://github.com/Mibidi/kuangbao)）。
+本免责声明适用于 GitHub 项目 **“kuangbao”**（[项目地址](https://github.com/Meibidi/kuangbao)）。
 
 ### 📖 用途说明
 
